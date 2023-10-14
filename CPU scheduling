@@ -1,22 +1,106 @@
+/*
+    Formulas:
+        Turn around time = exit time(find by code) - arrival time(given)
+        waiting time = turn around time(find by code) - burst time(given)
+    tasks:
+        1- find Exit time
+        2- find turn around time
+        3- waiting time
+        4- need to calculate avg time 
+        5- need to calculate avg turn aroung time
+    */
+
 #include <iostream>
 using namespace std;
+
+void frontEnd() {
+    cout << "                   <-+-+-+-+-+-+-+__WELCOME__+-+-+-+-+-+-+->" << endl;
+    cout << endl;
+
+    cout << "Here you will be getting the solutions based on CPU Scheduling problems in following methods :- " << endl;
+    cout << endl;
+    
+    cout << " 1) First come first serve (FCFS) " << endl;
+    cout << " 2) Shortest job first (SJF - preemptive) " << endl;
+    cout << " 3) Shortest job first (SJF - non-preemptive ) " << endl;
+    cout << " 4) Round robin scheduling " << endl;
+    cout << endl;
+}
+
+void printTable(int processId, int arrivalTime[], int burstTime[]) {
+    cout << "Here's is your given input: " << endl << endl;
+    cout << "Process ID || Arrival Time || Burst Time" << endl;
+    for(int i=1; i<=processId; i++) {
+        cout << "   " << i;
+        cout << "                " << arrivalTime[i];
+        cout << "              " << burstTime[i] << endl;
+    }
+}
+
+void byFCFS(int processId, int arrivalTime[], int burstTime[]) {
+    // jiska arrival time kam hoga usko pehle bulao
+    // usko pura niptao
+    // then uska exit time note kro (count)
+    // then similarly with other processes
+    
+    /* approach 1:
+        selection sort use krke sbse km arrival time nikalte then
+        process ko pura chalate
+        agr idle condition rehti to count ko utna aage bda dete jb tk koi arrive na ho
+    */
+    
+    int cpuTime = 0;
+    int count = 0;
+    int exitTime[processId];
+    int min;
+    for(int i=1; i<=processId; i++) {
+        min = arrivalTime[1];
+        for(int j=2; j<=processId; j++) {
+            if((min > arrivalTime[j]) && (arrivalTime[j] != -1)) {
+                min = arrivalTime[j];
+                cout << "min = " << min << endl;
+                arrivalTime[j] = -1;
+                cpuTime += burstTime[j];
+                // exitTime[j] = cpuTime;
+            } 
+        }
+    }
+    cout << "Total cpu time = " << cpuTime << endl;
+    
+}
+
+
+
 int main()
 {
-
-    int numProcess, process, arrivalTime, burstTime;
-
-    cout << "                   <-+-+-+-+-+-+-+__WELCOME__+-+-+-+-+-+-+->            " << endl;
-    cout << endl;
-
-    cout << "Here you can find suitable CPU scheduling methods among these :- " << endl;
-    cout << endl;
-    cout << " 1) Round cabin scheduling " << endl;
-    cout << " 2) First come first serve (FCFS) " << endl;
-    cout << " 3) Shortest job first (SJF - preemptive) " << endl;
-    cout << " 4) Shortest job first (SJF - non-preemptive ) " << endl;
-
-    cout << " Enter number of processes : " << endl;
-    cin >> numProcess;
-
+    // printing front-end
+    frontEnd();
+    
+    // initialization
+    int processId;
+    cout << "Enter number of processes: ";
+    cin >> processId;
+    int arrivalTime[processId];
+    int burstTime[processId];
+    
+    // taking input
+    cout << "Enter the Arrival Time of all processes: ";
+    for(int i=1; i<=processId; i++) {
+        cin >> arrivalTime[i];
+    }
+    cout << "Enter the Burst Time of all processes: ";
+    for(int i=1; i<=processId; i++) {
+        cin >> burstTime[i];
+    }
+    
+    // printing the table 
+    printTable(processId, arrivalTime, burstTime);
+    
+    // now man chizzz
+    byFCFS(processId, arrivalTime, burstTime);
+    // bySJF();
+    // bySJFp();
+    // byRobin();
+    
     return 0;
 }
